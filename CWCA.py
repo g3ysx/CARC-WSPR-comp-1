@@ -129,7 +129,8 @@ for m in mc:
       print 'Countries (Entities) heard in =', len(mcw[mem]), 'Band slots =', len(msw[mem]), 'CQ zones =', len(mzw[mem])
 #      print '   Max Power(dBm) =', mp[mem], 'Bands Operated  =', len(mrxband[mem])
       print 'Bands Operated  =', len(mrxband[mem])
-      c = Counter(mp[mem])
+      c = str(Counter(mp[mem]))
+      c = c[9:-2]
       print "Number of times reported at following power in dBm", c
       print
 
