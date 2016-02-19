@@ -7,6 +7,7 @@ print
 mc = [] # member call
 mcw = []  # member country worked
 mzw = [] # member zone worked
+msqw = [] # member square worked
 msw = [] # slot = band + country
 mrxband = [] #bands heard on
 mtxband = [] #bands transmitting on
@@ -78,6 +79,7 @@ for m in mf:
    mzw.append([])
    mcw.append([])
    msw.append([])
+   msqw.append([])
    mrxband.append([])
    mtxband.append(md[1].strip())
    mp.append([])
@@ -110,6 +112,8 @@ for l in f:
             uniqueappend(mrxband[mem], band)
             uniqueappend(te,oe[obs])
             mp[mem].append(int(ls[8]))
+            sq = ls[3][:2]
+            uniqueappend(msqw[mem], sq)
       else:
          print "missing observer", ls[2], ls[3]
          if ls[2] not in misso:
@@ -132,6 +136,13 @@ for m in mc:
       c = str(Counter(mp[mem]))
       c = c[9:-2]
       print "Number of times reported at following power in dBm", c
+      print 'Number of Maidenhead large squares heard in =', len(msqw[mem])
+      print 'Maidenhead score = M Sq * band slots =', len(msqw[mem])*len(msw[mem])
+      print 'Maidenhead squares are : ',
+      msqw[mem].sort()
+      for sq in msqw[mem]:
+         print sq+',',
+      print
       print
 
 print
