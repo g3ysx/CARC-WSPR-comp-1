@@ -23,6 +23,7 @@ misso = [] # missing observers
 obsIncomplete=False
 
 
+
 def uniqueappend(list, val):
    if val not in list:
       list.append(val)
@@ -126,10 +127,17 @@ if obsIncomplete:
    mo.flush()
    sys.exit(0)
 
+sm = [] #scoring member
+nsm = 0 #num scoring members
+cq_score = 0
+mh_score = 0
+
 for m in mc:
    mem = mc.index(m)
    if  len(mzw[mem]) > 0:
-      print m,  'Score = CQ zones x band slots =', len(mzw[mem])*len(msw[mem])
+      cq_score = len(mzw[mem])*len(msw[mem])
+      mh_score = len(msqw[mem])*len(msw[mem])
+      print m,  'Score = CQ zones x band slots =', cq_score
       print 'Countries (Entities) heard in =', len(mcw[mem]), 'Band slots =', len(msw[mem]), 'CQ zones =', len(mzw[mem])
 #      print '   Max Power(dBm) =', mp[mem], 'Bands Operated  =', len(mrxband[mem])
       print 'Bands Operated  =', len(mrxband[mem])
@@ -137,17 +145,32 @@ for m in mc:
       c = c[9:-2]
       print "Number of times reported at following power in dBm", c
       print 'Number of Maidenhead large squares heard in =', len(msqw[mem])
-      print 'Maidenhead score = M Sq * band slots =', len(msqw[mem])*len(msw[mem])
+      print 'Maidenhead score = M Sq * band slots =', mh_score
       print 'Maidenhead squares are : ',
       msqw[mem].sort()
       for sq in msqw[mem]:
          print sq+',',
       print
       print
+      nsm = nsm + 1
+      sm.append([m, cq_score, mh_score])
 
+print
 print
 print 'Number of observers that heard us =', len(oc)
 print 'Total countries worked', len(te)
+
+
+sm = sorted(sm,key=lambda x: x[1], reverse=True)
+
+print
+print
+print 'Posn\tMember\tCQscore\tMHscore'
+print 
+
+for m in sm:
+   print sm.index(m),'\t',m[0], '\t', m[1], '\t', m[2] 
+
 
 #print 'Individual Details'
 #
