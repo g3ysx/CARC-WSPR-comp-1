@@ -1,8 +1,13 @@
 import sys
+from collections import Counter
 
 print('CARC WSPR Competition Adjudicator - Global Picture')
 print(sys.version)
 print
+
+entity=['UNKNOWN' for x in range(1,1200)]
+cw =[]
+ub = 0
 
 spots = 0
 observers = []
@@ -34,7 +39,7 @@ def uniqueappend(list, val):
 def freqtoband(freq):
    f=float(freq)
    if f < 0.1:
-      print 'unexpected band', freq
+      #print 'unexpected band', freq
       return('REJECT')
    if f < 0.2:
       return('2200m')
@@ -70,7 +75,7 @@ def freqtoband(freq):
       return('70cm')
    if f < 1300.0:
       return('23cm')
-   print 'unexpected band', freq
+   #print 'unexpected band', freq
    return('REJECT')
 
 
@@ -82,6 +87,8 @@ for l in f:
    if band != 'REJECT':
       uniqueappend(observers, ls[2])
       uniqueappend(bandobservers,str(band)+ls[2])
+   else:
+      ub = ub+1
 
 
 print 'Total Spots = ', spots
@@ -143,3 +150,51 @@ print '2m observbers    = ', o2m
 print '70cm observbers  = ', o70cm
 print '23cm observbers  = ', o23cm
 print '\ncheck total = ', o2200m+o630m+o160m+o80m+o60m+o40m+o30m+o20m+o17m+o15m+o12m+o10m+o6m+o4m+o2m+o70cm+o23cm
+
+print
+print 'Unexpected band seen', ub, 'times'
+print
+
+ef = open('Entities.csv', 'r')
+for e in ef:
+   e = e.split(',')
+   entity[int(e[1])]=e[0]
+
+eq=[]
+es=set()
+of = open('observers.txt', 'r')
+for o in of:
+   od = o.split(',')
+   ent = int(od[2].rstrip())
+   if ent not in es:
+      es.add(ent)
+   eq.append(ent)
+
+for i in es:
+   cw.append(entity[i])
+
+cw.sort()
+
+print 'Countries that heard us:'
+
+for c in cw:
+   print c+',',
+print
+print
+
+c = str(Counter(eq))
+c = c[9:-2]
+
+cl = c.split(',')
+
+print 'Number of observers by country (entity):'
+
+for r in cl:
+   rc = r.split(':')
+   print entity[int(rc[0])], ' : ',  int(rc[1])
+
+
+
+
+
+
