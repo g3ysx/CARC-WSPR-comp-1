@@ -91,12 +91,18 @@ for o in of:
    od = o.split(',')
    print o
    oc.append(od[0].rstrip().upper())
-   oz.append(od[1].rstrip())
-   oe.append(od[2].rstrip())
+   oz.append(str(int(od[1].rstrip())))
+   oe.append(str(int(od[2].rstrip())))
    if int(od[1].rstrip()) == 999:
       mo.write(o)
 
-f = open('wsprspots.csv', 'r')
+if len(sys.argv)==1:
+   print "Usage: CWCA.py <wsprSpotsFile>"
+   sys.exit()
+
+spotsFile = sys.argv[1]
+print 'Spots file = ', spotsFile
+f = open(spotsFile, 'r')
 for l in f:
    ls = l.split(',')
    if ls[6] in mc :
@@ -135,10 +141,12 @@ mh_score = 0
 for m in mc:
    mem = mc.index(m)
    if  len(mzw[mem]) > 0:
+      mzw[mem] = [int(z) for z in mzw[mem]] #convert zones to int
+      mzw[mem].sort(key=int)
       cq_score = len(mzw[mem])*len(msw[mem])
       mh_score = len(msqw[mem])*len(msw[mem])
       print m,  'Score = CQ zones x band slots =', cq_score
-      print 'Countries (Entities) heard in =', len(mcw[mem]), 'Band slots =', len(msw[mem]), 'CQ zones =', len(mzw[mem])
+      print 'Countries (Entities) heard in =', len(mcw[mem]), ', Band slots =', len(msw[mem]), ', CQ zones =', len(mzw[mem])
 #      print '   Max Power(dBm) =', mp[mem], 'Bands Operated  =', len(mrxband[mem])
       print 'Bands Operated  =', len(mrxband[mem])
       c = str(Counter(mp[mem]))
@@ -151,8 +159,12 @@ for m in mc:
       for sq in msqw[mem]:
          print sq+',',
       print
+      print 'CQ Zones are : ',
+      for z in mzw[mem]:
+         print z,',',
       print
-      nsm = nsm + 1
+      print
+      nsm = nsm + 1 #num scoring members
       sm.append([m, cq_score, mh_score])
 
 print
@@ -169,17 +181,9 @@ print 'Posn\tMember\tCQscore\tMHscore'
 print 
 
 for m in sm:
-   print sm.index(m),'\t',m[0], '\t', m[1], '\t', m[2] 
+   print sm.index(m)+1,'\t',m[0], '\t', m[1], '\t', m[2] 
 
 
-#print 'Individual Details'
-#
-#for m in mc:
-#   mem = mc.index(m)
-#   if  len(mzw[mem]) > 0:
-#      print m
-#      for bs in msw[mem]:
-#               
 
  
 
