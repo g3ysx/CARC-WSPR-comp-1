@@ -116,7 +116,7 @@ for l in f:
             uniqueappend(mzw[mem], oz[obs])
             uniqueappend(mcw[mem], oe[obs])
             uniqueappend(msw[mem], band+oe[obs])
-            uniqueappend(mrxband[mem], band)
+            mrxband[mem].append(band)
             uniqueappend(te,oe[obs])
             mp[mem].append(int(ls[8]))
             sq = ls[3][:2]
@@ -147,8 +147,10 @@ for m in mc:
       mh_score = len(msqw[mem])*len(msw[mem])
       print m,  'Score = CQ zones x band slots =', cq_score
       print 'Countries (Entities) heard in =', len(mcw[mem]), ', Band slots =', len(msw[mem]), ', CQ zones =', len(mzw[mem])
-#      print '   Max Power(dBm) =', mp[mem], 'Bands Operated  =', len(mrxband[mem])
-      print 'Bands Operated  =', len(mrxband[mem])
+      b = str(Counter(mrxband[mem]))
+      b = b[9:-2] # trim the beginning and end of the Counter standard format
+      b = b.replace("'","") # get rid of the quote char from Counter standard format
+      print 'Number of times reported on the following bands', b
       c = str(Counter(mp[mem]))
       c = c[9:-2]
       print "Number of times reported at following power in dBm", c
