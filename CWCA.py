@@ -111,12 +111,12 @@ for l in f:
          if band <> 'REJECT':        
             obs=oc.index(ls[2])
             mem=mc.index(ls[6])
-            if mtxband[mem] != 'ALL':
+            mrxband[mem].append(band)
+            if mtxband[mem] != 'ALL': # correct the slots for the single band entrants
                band = mtxband[mem]
+            uniqueappend(msw[mem], band+oe[obs])
             uniqueappend(mzw[mem], oz[obs])
             uniqueappend(mcw[mem], oe[obs])
-            uniqueappend(msw[mem], band+oe[obs])
-            mrxband[mem].append(band)
             uniqueappend(te,oe[obs])
             mp[mem].append(int(ls[8]))
             sq = ls[3][:2]
