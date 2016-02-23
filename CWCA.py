@@ -9,6 +9,7 @@ mcw = []  # member country worked
 mzw = [] # member zone worked
 msqw = [] # member square worked
 msw = [] # slot = band + country
+mbec = [] # band entity count
 mrxband = [] #bands heard on
 mtxband = [] #bands transmitting on
 mp = [] # member power
@@ -27,7 +28,9 @@ obsIncomplete=False
 def uniqueappend(list, val):
    if val not in list:
       list.append(val)
-   return
+      return(True)
+   else:
+      return(False)
 
 def freqtoband(freq):
    f=float(freq)
@@ -73,10 +76,19 @@ def freqtoband(freq):
    print 'unexpected band', freq
  
 
+#
+# Main program starts here
+#
+
+if len(sys.argv)==1:
+   print "Usage: CWCA.py wsprSpotsFile <-d>"
+   sys.exit()
+
+
 mf = open('members.txt', 'r')
 for m in mf:
    md = m.split(',')
-   mc.append(md[0].rstrip().upper())
+   mc.append(md[0].rstrip().lstrip().upper())
    mzw.append([])
    mcw.append([])
    msw.append([])
@@ -84,24 +96,29 @@ for m in mf:
    mrxband.append([])
    mtxband.append(md[1].strip())
    mp.append([])
+   mbec.append([])
+
+debugObservers = False 
+if len(sys.argv) == 3: 
+   debugObservers = sys.argv[2].startswith('-d')
 
 of = open('observers.txt', 'r')
 mo = open('missing-observers.txt', 'w')
 for o in of:
    od = o.split(',')
-   print o
-   oc.append(od[0].rstrip().upper())
-   oz.append(str(int(od[1].rstrip())))
-   oe.append(str(int(od[2].rstrip())))
+   if debugObservers:
+      print o
+   oc.append(od[0].rstrip().lstrip().upper())
+   oz.append(str(int(od[1])))
+   oe.append(str(int(od[2])))
    if int(od[1].rstrip()) == 999:
       mo.write(o)
 
-if len(sys.argv)==1:
-   print "Usage: CWCA.py <wsprSpotsFile>"
-   sys.exit()
 
 spotsFile = sys.argv[1]
 print 'Spots file = ', spotsFile
+print
+
 f = open(spotsFile, 'r')
 for l in f:
    ls = l.split(',')
@@ -114,7 +131,8 @@ for l in f:
             mrxband[mem].append(band)
             if mtxband[mem] != 'ALL': # correct the slots for the single band entrants
                band = mtxband[mem]
-            uniqueappend(msw[mem], band+oe[obs])
+            if uniqueappend(msw[mem], band+oe[obs]):
+               mbec[mem].append(band)
             uniqueappend(mzw[mem], oz[obs])
             uniqueappend(mcw[mem], oe[obs])
             uniqueappend(te,oe[obs])
@@ -148,12 +166,20 @@ for m in mc:
       print m,  'Score = CQ zones x band slots =', cq_score
       print 'Countries (Entities) heard in =', len(mcw[mem]), ', Band slots =', len(msw[mem]), ', CQ zones =', len(mzw[mem])
       b = str(Counter(mrxband[mem]))
-      b = b[9:-2] # trim the beginning and end of the Counter standard format
-      b = b.replace("'","") # get rid of the quote char from Counter standard format
+      b = b[9:] # trim the beginning and end of the Counter standard format
+      for char in "{}()'":
+         b = b.replace(char,'')
       print 'Number of times reported on the following bands', b
       c = str(Counter(mp[mem]))
-      c = c[9:-2]
-      print "Number of times reported at following power in dBm", c
+      c = c[9:]
+      for char in "{}()'":
+         c=c.replace(char,'')
+      print 'Number of times reported at following power in dBm', c
+      bec = str(Counter(mbec[mem]))
+      bec = bec[9:]
+      for char in "{}()'":
+         bec = bec.replace(char,'')
+      print 'Number of entities on each band that heard this station :',bec
       print 'Number of Maidenhead large squares heard in =', len(msqw[mem])
       print 'Maidenhead score = M Sq * band slots =', mh_score
       print 'Maidenhead squares are : ',
@@ -163,7 +189,7 @@ for m in mc:
       print
       print 'CQ Zones are : ',
       for z in mzw[mem]:
-         print z,',',
+         print str(z)+',',
       print
       print
       nsm = nsm + 1 #num scoring members
