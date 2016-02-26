@@ -32,7 +32,7 @@ def uniqueappend(list, val):
    else:
       return(False)
 
-def freqtoband(freq):
+def oldfreqtoband(freq):
    f=float(freq)
    if f < 0.002:
       return('REJECT')
@@ -74,6 +74,55 @@ def freqtoband(freq):
    if f < 1300.0:
       return('23cm')
    print 'unexpected band', freq
+ 
+
+def freqtoband(freq):
+   f=float(freq)
+   tol = 0.005 #5KHz
+
+   if f>0.136-tol and f<0.136+tol:
+      return('2200m')
+   if f>0.5 and f<0.51:
+      return('630m') # fixup for spurious observations
+   if f>0.4742-tol and f<0.4742+tol:
+      return('630m')
+   if f>1.8366-tol and f<1.8366+tol:
+      return('160m')
+   if f>3.5926-tol and f<3.5926+tol:
+      return('80m')
+   if f>3.5 and f<3.7:
+      return('80m') #Fixup
+   if f>5.2872-tol and f<5.2872+tol:
+      return('60m')
+   if f>7.0386-tol and f<7.0386+tol:
+      return('40m')
+   if f>7.0 and f<7.2:
+      return('40m') #another fixup
+   if f>10.1387-tol and f<10.1387+tol:
+      return('30m')
+   if f>10.0 and f<10.2:
+      return('30m') #fixup for spurious freq report
+   if f>14.0956-tol and f<14.0956+tol:
+      return('20m')
+   if f>18.1046-tol and f<18.1046+tol:
+      return('17m')
+   if f>21.0946-tol and f<21.0946+tol:
+      return('15m')
+   if f>24.9246-tol and f<24.9246+tol:
+      return('12m')
+   if f>28.1246-tol and f<28.1246+tol:
+      return('10m')
+   if f>50.293-tol and f<50.293+tol:
+      return('6m')
+   if f>70.091-tol and f<70.091+tol:
+      return('4m')
+   if f>144.489-tol and f<144.489+tol:
+      return('2m')
+   if f>432.3-tol and f<432.3+tol:
+      return('70cm')
+   if f>1296.5-tol and f<1296.5+tol:
+      return('23cm')   
+   return('REJECT')
  
 
 #
@@ -119,7 +168,9 @@ spotsFile = sys.argv[1]
 print 'Spots file = ', spotsFile
 print
 
+rejectedReports = 0
 f = open(spotsFile, 'r')
+r = open('RejectedFrequency.txt', 'w') 
 for l in f:
    ls = l.split(',')
    if ls[6] in mc :
@@ -139,6 +190,9 @@ for l in f:
             mp[mem].append(int(ls[8]))
             sq = ls[3][:2]
             uniqueappend(msqw[mem], sq)
+         else:
+            r.write(str(ls)+'\n')
+            rejectedReports=rejectedReports+1
       else:
          print "missing observer", ls[2], ls[3]
          if ls[2] not in misso:
@@ -198,8 +252,8 @@ for m in mc:
 print
 print
 print 'Number of observers that heard us =', len(oc)
-print 'Total countries worked', len(te)
-
+print 'Total countries worked = ', len(te)
+print 'Rejected Reporst = ', rejectedReports
 
 sm = sorted(sm,key=lambda x: x[1], reverse=True)
 

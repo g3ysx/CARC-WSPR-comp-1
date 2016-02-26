@@ -78,8 +78,20 @@ def freqtoband(freq):
    #print 'unexpected band', freq
    return('REJECT')
 
+#
+# Main program starts here
+#
 
-f = open('wsprspots.csv', 'r')
+
+if len(sys.argv)==1:
+   print "Usage: CWCA.py wsprSpotsFile <-d>"
+   sys.exit()
+
+spotsFile = sys.argv[1]
+print 'Spots file = ', spotsFile
+print
+
+f = open(spotsFile, 'r')
 for l in f:
    ls = l.split(',')
    spots = spots + 1
