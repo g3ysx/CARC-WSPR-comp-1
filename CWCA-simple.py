@@ -1,37 +1,15 @@
 import sys
-from collections import Counter
 
 print('CARC WSPR Competition Adjudicator - Simplified version')
 print
 
 mc = [] # member call
-#mcw = []  # member country worked
 mbzw = [] # member zone worked
-#msqw = [] # member square worked
 msw = [] # slot = band + country
-#mbec = [] # band entity count
-#mrxband = [] #bands heard on
-#mtxband = [] #bands transmitting on
-#mp = [] # member power
-#te = [] # total entities worked by club members
 
 oc = [] #observers call
 oe = [] #observers entity
 oz = [] #observers zone
-
-#misso = [] # missing observers
-
-#obsIncomplete=False
-
-
-
-def uniqueappend(list, val):
-   if val not in list:
-      list.append(val)
-      return(True)
-   else:
-      return(False)
-
 
 def freqtoband(freq):
    f=float(freq)
@@ -97,17 +75,7 @@ for m in mf:
    mc.append(md[0].rstrip().lstrip().upper())
 
    mbzw.append(set([]))
-#   mcw.append([])
    msw.append(set([]))
-#   msqw.append([])
-#   mrxband.append([])
-#   mtxband.append(md[1].strip())
-#   mp.append([])
-#   mbec.append([])
-
-#debugObservers = False 
-#if len(sys.argv) == 3: 
-#   debugObservers = sys.argv[2].startswith('-d')
 
 of = open('observers.txt', 'r')
 for o in of:
@@ -121,9 +89,7 @@ spotsFile = sys.argv[1]
 print 'Spots file = ', spotsFile
 print
 
-#rejectedReports = 0
 f = open(spotsFile, 'r')
-#r = open('RejectedFrequency.txt', 'w') 
 for l in f:
    ls = l.split(',')
    if ls[6] in mc :
