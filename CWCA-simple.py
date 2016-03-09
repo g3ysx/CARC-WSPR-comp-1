@@ -1,4 +1,5 @@
 import sys
+from collections import Counter
 
 print('CARC WSPR Competition Adjudicator - Simplified version')
 print
@@ -35,9 +36,11 @@ def freqtoband(freq):
       return('40m') #another fixup
    if f>10.1387-tol and f<10.1387+tol:
       return('30m')
-   if f>10.0 and f<10.2:
+   if f>10.0 and f<10.5:
       return('30m') #fixup for spurious freq report
    if f>14.0956-tol and f<14.0956+tol:
+      return('20m')
+   if f>14.0 and f<14.35: #another fixup
       return('20m')
    if f>18.1046-tol and f<18.1046+tol:
       return('17m')
@@ -113,11 +116,17 @@ for m in mc:
      print sorted(msw[mem])
      print "zones worked :"
      print sorted(mbzw[mem])
-     print
-
-
- 
-
+     print "Count of zones worked on each band"
+     zlist = []
+     for z in mbzw[mem]:
+        zstr = str(z).split('B')
+        zlist.append(zstr[1])
+     zcnt=Counter(zlist)
+     zc = str(Counter(zlist))
+     zc = zc[9:] # trim the beginning and end of the Counter standard format
+     for char in "{}()'":
+         zc = zc.replace(char,'')
+     print zc
 
 
 
