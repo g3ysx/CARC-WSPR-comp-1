@@ -100,9 +100,11 @@ def freqtoband(freq):
       return('40m') #another fixup
    if f>10.1387-tol and f<10.1387+tol:
       return('30m')
-   if f>10.0 and f<10.2:
+   if f>10.0 and f<10.5:
       return('30m') #fixup for spurious freq report
    if f>14.0956-tol and f<14.0956+tol:
+      return('20m')
+   if f>14.0 and f<14.35:
       return('20m')
    if f>18.1046-tol and f<18.1046+tol:
       return('17m')
@@ -190,6 +192,8 @@ for l in f:
             mp[mem].append(int(ls[8]))
             sq = ls[3][:2]
             uniqueappend(msqw[mem], sq)
+#            if ls[6]=='M0HQM' and oe[obs] == '263':
+#               print ls
          else:
             r.write(str(ls)+'\n')
             rejectedReports=rejectedReports+1
