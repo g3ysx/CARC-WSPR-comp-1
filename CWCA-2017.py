@@ -13,6 +13,7 @@ mtxband = [] #bands transmitting on
 mp = [] # member power
 te = [] # total entities worked by club members
 
+obsWhoHeardUs = [] #observers who heard us
 oc = [] #observers call
 oe = [] #observers entity
 ocountry = [] #observers country
@@ -133,6 +134,7 @@ for l in f:
          band = freqtoband(ls[5])
          if band <> 'REJECT':        
             obs=oc.index(ls[2])
+            uniqueappend(obsWhoHeardUs, obs)
             mem=mc.index(ls[6])
             mrxband[mem].append(band)
             if mtxband[mem] != 'ALL': # correct the slots for the single band entrants
@@ -204,9 +206,9 @@ for m in mc:
       nsm = nsm + 1 #num scoring members
       sm.append([m, len(msw[mem]), len(mcw[mem])])
 
-print 'Number of observers that heard us =', len(oc)
+print 'Number of observers that heard us =', len(obsWhoHeardUs)
 print 'Total countries worked = ', len(te)
-print 'Rejected Reporst = ', rejectedReports
+print 'Rejected Reports = ', rejectedReports
 
 sm = sorted(sm,key=lambda x: x[1], reverse=True)
 
