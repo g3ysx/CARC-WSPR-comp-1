@@ -48,7 +48,7 @@ def freqtoband(freq):
       return('++80m')
    if f>3.5 and f<3.7:
       return('++80m') #Fixup
-   if f>5.2872-tol and f<5.2872+tol:
+   if f>5.2872-tol and f<5.5+tol:
       return('++60m')
    if f>7.0386-tol and f<7.0386+tol:
       return('++40m')
