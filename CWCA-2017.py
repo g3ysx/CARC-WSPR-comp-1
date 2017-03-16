@@ -36,20 +36,20 @@ def freqtoband(freq):
    f=float(freq)
    tol = 0.005 #5KHz
 
-   if f>0.136-tol and f<0.136+tol:
-      return('2200m')
-   if f>0.5 and f<0.51:
-      return('+630m') # fixup for spurious observations
-   if f>0.4742-tol and f<0.4742+tol:
-      return('+630m')
+#   if f>0.136-tol and f<0.136+tol:
+#      return('2200m')
+#   if f>0.5 and f<0.51:
+#      return('+630m') # fixup for spurious observations
+#   if f>0.4742-tol and f<0.4742+tol:
+#      return('+630m')
    if f>1.8366-tol and f<1.8366+tol:
       return('+160m')
    if f>3.5926-tol and f<3.5926+tol:
       return('++80m')
    if f>3.5 and f<3.7:
       return('++80m') #Fixup
-   if f>5.2872-tol and f<5.5+tol:
-      return('++60m')
+#   if f>5.2872-tol and f<5.5+tol:
+#      return('++60m')
    if f>7.0386-tol and f<7.0386+tol:
       return('++40m')
    if f>7.0 and f<7.2:
