@@ -149,7 +149,7 @@ for l in f:
             r.write(str(ls)+'\n')
             rejectedReports=rejectedReports+1
       else:
-         print "missing observer", ls[2], ls[3]
+#         print "missing observer", ls[2], ls[3]
          if ls[2] not in misso:
             misso.append(ls[2])
             mo.write(ls[2]+' '+ls[3]+'+++'+'\n')
